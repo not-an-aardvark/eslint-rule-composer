@@ -46,7 +46,7 @@ module.exports = ruleComposer.joinReports([
 
 ## API
 
-### `ruleComposer.filterReports(rule, predicate) and ruleComposer.mapReports(rule, predicate)`
+### `ruleComposer.filterReports(rule, predicate)` and `ruleComposer.mapReports(rule, predicate)`
 
 Both of these functions accept two arguments: `rule` (an ESLint rule object) and `predicate` (a function)
 
