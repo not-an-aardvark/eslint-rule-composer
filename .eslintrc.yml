@@ -1,0 +1,21 @@
+extends:
+  - airbnb-base
+  - plugin:node/recommended
+
+parserOptions:
+  sourceType: script
+
+plugins:
+  - node
+
+env:
+  node: true
+
+rules:
+  comma-dangle: [error, always-multiline]
+  function-paren-newline: [error, consistent]
+  max-len: off
+  prefer-rest-params: off
+  prefer-spread: off
+  no-restricted-syntax: off
+  prefer-destructuring: off
