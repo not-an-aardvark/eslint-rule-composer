@@ -61,6 +61,8 @@ In both cases, `predicate` is called with two arguments: `problem` and `metadata
     {
       node: ASTNode | null,
       message: string,
+      messageId: string | null,
+      data: Object | null,
       loc: {
         start: { line: number, column: number },
         end: { line: number, column: number } | null
@@ -69,6 +71,9 @@ In both cases, `predicate` is called with two arguments: `problem` and `metadata
     }
     ```
 
+    Note that the `messageId` and `data` properties will only be present if the original rule reported a problem using [Message IDs](https://eslint.org/docs/developer-guide/working-with-rules#messageids), otherwise they will be null.
+
+    When returning a descriptor with `mapReports`, the `messageId` property on the returned descriptor will be used to generate the new message. To modify a report message directly for a rule that uses message IDs, ensure that the `predicate` function returns an object without a `messageId` property.
 * `metadata` is an object containing information about the source text that was linted. This has a `sourceCode` property, which is a [`SourceCode`](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode) instance corresponding to the linted text.
 
 ### `ruleComposer.joinReports(rules)`

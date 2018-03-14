@@ -1,6 +1,7 @@
 'use strict';
 
 const eslint = require('eslint');
+const assert = require('chai').assert;
 const ruleComposer = require('../..');
 
 const RuleTester = eslint.RuleTester;
@@ -88,6 +89,62 @@ ruleTester.run(
       {
         code: 'foo;',
         errors: 1,
+      },
+    ],
+  }
+);
+
+ruleTester.run(
+  'composing rules that use messageId',
+  ruleComposer.filterReports(
+    {
+      meta: {
+        messages: {
+          foo: 'Foo error.',
+          bar: 'Bar error.',
+          baz: 'Baz error {{myData}}.',
+        },
+      },
+      create(context) {
+        return {
+          Program(node) {
+            context.report({ node, messageId: 'foo' });
+            context.report({ node, messageId: 'bar' });
+            context.report({ node, messageId: 'baz', data: { myData: 'BAZ', otherData: 'blah' } });
+            context.report({ node, message: 'Not message id {{aa}}', data: { aa: 'foo' } });
+          },
+        };
+      },
+    },
+    (problem) => {
+      if (problem.messageId === 'baz') {
+        assert.strictEqual(problem.message, 'Baz error BAZ.');
+        assert.deepEqual(problem.data, { myData: 'BAZ' });
+      } else if (problem.messageId === 'foo') {
+        assert.strictEqual(problem.message, 'Foo error.');
+        assert.deepEqual(problem.data, {});
+      } else if (problem.messageId === 'bar') {
+        assert.strictEqual(problem.message, 'Bar error.');
+        assert.deepEqual(problem.data, {});
+      } else if (problem.messageId === null) {
+        assert.strictEqual(problem.message, 'Not message id foo');
+        assert.strictEqual(problem.data, null);
+      } else {
+        assert.fail('Unexpected reported problem');
+      }
+
+      return problem.message === 'Foo error.' || problem.messageId === 'baz';
+    }
+  ),
+  {
+    valid: [],
+    invalid: [
+      {
+        code: 'x',
+        errors: [
+          { type: 'Program', message: 'Foo error.' },
+          { type: 'Program', message: 'Baz error BAZ.' },
+        ],
       },
     ],
   }
