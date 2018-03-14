@@ -1,6 +1,6 @@
 {
   "name": "eslint-rule-composer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A utility for composing ESLint rules from other ESLint rules",
   "main": "lib/rule-composer.js",
   "files": [
