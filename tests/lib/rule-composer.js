@@ -38,7 +38,7 @@ ruleTester.run(
 ruleTester.run(
   'filterReports - with settings',
   ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor, m) => (
-    descriptor.node && m.settings.tokenWhitelist.includes(descriptor.node.name) === false
+    descriptor.node && m.settings.tokenWhitelist.indexOf(descriptor.node.name) === -1
   )),
   {
     valid: [
@@ -72,7 +72,7 @@ ruleTester.run(
 );
 
 const ruleWithOptions = ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor, m) => (
-  descriptor.node && m.options[0].tokenWhitelist.includes(descriptor.node.name) === false
+  descriptor.node && m.options[0].tokenWhitelist.indexOf(descriptor.node.name) === -1
 ));
 
 // overwrite schema to allow custom options...
