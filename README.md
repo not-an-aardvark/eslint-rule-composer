@@ -100,7 +100,7 @@ module.exports = ruleComposer.filterReports(
   (problem, metadata) => {
     const firstToken = metadata.sourceCode.getFirstToken(problem.node);
     const whitelist = settings.tokenWhitelist;
-    return whitelist.includes(value) === false
+    return !whitelist.includes(value);
   }
 );
 ```
