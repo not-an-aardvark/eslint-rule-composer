@@ -44,7 +44,7 @@ module.exports = ruleComposer.joinReports([
 ]);
 ```
 
-You can access options set on a rule. The following example creates a modified version of the [`no-unused-expressions`](https://eslint.org/docs/rules/no-unused-expressions) rule which accepts a list of exceptions.
+You can access rule's options and [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings) from the current ESLint configuration. The following example creates a modified version of the [`no-unused-expressions`](https://eslint.org/docs/rules/no-unused-expressions) rule which accepts a list of exceptions.
 
 ```js
 
@@ -71,40 +71,6 @@ module.exports = ruleComposer.filterReports(
   }
 );
 ```
-
-You can also access [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings) from the current ESLint configuration file:
-
-
-```js
-
-/*
-  .eslint.json:
-
-  {
-    "settings": {
-      "tokenWhitelist": ["expect", "test"]
-    },
-    "rules": {
-      "custom-no-unused-expressions": "error"
-    }
-  }
-  
-*/
-
-const ruleComposer = require('eslint-rule-composer');
-const eslint = require('eslint');
-const noUnusedExpressionsRule = new eslint.Linter().getRules().get('no-unused-expressions');
-
-module.exports = ruleComposer.filterReports(
-  noUnusedExpressionsRule,
-  (problem, metadata) => {
-    const firstToken = metadata.sourceCode.getFirstToken(problem.node);
-    const whitelist = settings.tokenWhitelist;
-    return !whitelist.includes(value);
-  }
-);
-```
-
 
 ## API
 
