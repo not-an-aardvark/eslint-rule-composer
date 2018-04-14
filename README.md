@@ -44,6 +44,34 @@ module.exports = ruleComposer.joinReports([
 ]);
 ```
 
+You can access rule's options and [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings) from the current ESLint configuration. The following example creates a modified version of the [`no-unused-expressions`](https://eslint.org/docs/rules/no-unused-expressions) rule which accepts a list of exceptions.
+
+```js
+
+/*
+  rule configuration:
+
+  {
+    "custom-no-unused-expressions": ["error", {
+      "whitelist": ["expect", "test"]
+    }]
+  }
+*/
+
+const ruleComposer = require('eslint-rule-composer');
+const eslint = require('eslint');
+const noUnusedExpressionsRule = new eslint.Linter().getRules().get('no-unused-expressions');
+
+module.exports = ruleComposer.filterReports(
+  noUnusedExpressionsRule,
+  (problem, metadata) => {
+    const firstToken = metadata.sourceCode.getFirstToken(problem.node);
+    const whitelist = metadata.options[0].whitelist;
+    return whitelist.includes(value) === false
+  }
+);
+```
+
 ## API
 
 ### `ruleComposer.filterReports(rule, predicate)` and `ruleComposer.mapReports(rule, predicate)`
@@ -74,7 +102,11 @@ In both cases, `predicate` is called with two arguments: `problem` and `metadata
     Note that the `messageId` and `data` properties will only be present if the original rule reported a problem using [Message IDs](https://eslint.org/docs/developer-guide/working-with-rules#messageids), otherwise they will be null.
 
     When returning a descriptor with `mapReports`, the `messageId` property on the returned descriptor will be used to generate the new message. To modify a report message directly for a rule that uses message IDs, ensure that the `predicate` function returns an object without a `messageId` property.
-* `metadata` is an object containing information about the source text that was linted. This has a `sourceCode` property, which is a [`SourceCode`](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode) instance corresponding to the linted text.
+* `metadata` is an object containing information about the source text that was linted. This has the following properties:
+
+* `sourceCode`: a [`SourceCode`](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode) instance corresponding to the linted text.
+* `settings`: linter instance's [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings)
+* `options`: rule's [configuration options](https://eslint.org/docs/developer-guide/working-with-rules#contextoptions)
 
 ### `ruleComposer.joinReports(rules)`
 

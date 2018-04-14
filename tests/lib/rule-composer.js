@@ -33,6 +33,85 @@ ruleTester.run(
   }
 );
 
+// test with settings
+
+ruleTester.run(
+  'filterReports - with settings',
+  ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor, m) => (
+    descriptor.node && m.settings.tokenWhitelist.indexOf(descriptor.node.name) === -1
+  )),
+  {
+    valid: [
+      {
+        code: 'foo;',
+        settings: { tokenWhitelist: ['foo'] },
+      },
+      {
+        code: 'var bar; bar;',
+        settings: { tokenWhitelist: ['foo'] },
+      },
+    ],
+    invalid: [
+      {
+        code: 'bar;',
+        errors: [{ line: 1, column: 1 }],
+        settings: { tokenWhitelist: ['foo'] },
+      },
+      {
+        code: 'foo; bar;',
+        errors: [{ line: 1, column: 6 }],
+        settings: { tokenWhitelist: ['foo'] },
+      },
+      {
+        code: 'bar; foo;',
+        errors: [{ line: 1, column: 1 }],
+        settings: { tokenWhitelist: ['foo'] },
+      },
+    ],
+  }
+);
+
+const ruleWithOptions = ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor, m) => (
+  descriptor.node && m.options[0].tokenWhitelist.indexOf(descriptor.node.name) === -1
+));
+
+// overwrite schema to allow custom options...
+ruleWithOptions.meta.schema[0].additionalProperties = true;
+
+ruleTester.run(
+  'filterReports - with options',
+  ruleWithOptions,
+  {
+    valid: [
+      {
+        code: 'foo;',
+        options: [{ tokenWhitelist: ['foo'] }],
+      },
+      {
+        code: 'var bar; bar;',
+        options: [{ tokenWhitelist: ['foo'] }],
+      },
+    ],
+    invalid: [
+      {
+        code: 'bar;',
+        errors: [{ line: 1, column: 1 }],
+        options: [{ tokenWhitelist: ['foo'] }],
+      },
+      {
+        code: 'foo; bar;',
+        errors: [{ line: 1, column: 6 }],
+        options: [{ tokenWhitelist: ['foo'] }],
+      },
+      {
+        code: 'bar; foo;',
+        errors: [{ line: 1, column: 1 }],
+        options: [{ tokenWhitelist: ['foo'] }],
+      },
+    ],
+  }
+);
+
 ruleTester.run(
   'joinReports',
   ruleComposer.joinReports([
@@ -69,6 +148,50 @@ ruleTester.run(
         errors: [
           { type: 'Program', message: 'FOO' },
         ],
+      },
+    ],
+  }
+);
+
+// test with settings
+
+ruleTester.run(
+  'mapReports - with settings',
+  ruleComposer.mapReports(
+    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
+    (descriptor, m) => Object.assign({}, descriptor, { message: descriptor.message[m.settings.method]() })
+  ),
+  {
+    valid: [],
+    invalid: [
+      {
+        code: 'a',
+        errors: [
+          { type: 'Program', message: 'FOO' },
+        ],
+        settings: { method: 'toUpperCase' },
+      },
+    ],
+  }
+);
+
+// test with settings
+
+ruleTester.run(
+  'mapReports - with options',
+  ruleComposer.mapReports(
+    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
+    (descriptor, m) => Object.assign({}, descriptor, { message: descriptor.message[m.options[0].method]() })
+  ),
+  {
+    valid: [],
+    invalid: [
+      {
+        code: 'a',
+        errors: [
+          { type: 'Program', message: 'FOO' },
+        ],
+        options: [{ method: 'toUpperCase' }],
       },
     ],
   }
