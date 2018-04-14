@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.0 (2018-04-14)
+
+* Update: Add a reference to context settings and options ([#1](https://github.com/not-an-aardvark/eslint-rule-composer/issues/1)) ([e7312ba](https://github.com/not-an-aardvark/eslint-rule-composer/commit/e7312bae50399f7576220649a52b8bbb4d4083c2))
+* Build: set up Travis CI ([7e43e8c](https://github.com/not-an-aardvark/eslint-rule-composer/commit/7e43e8c05f667b0335f8ca7505acf831e1616070))
+
 ## v0.1.1 (2018-03-14)
 
 * Chore: set up release script ([2ce3403](https://github.com/not-an-aardvark/eslint-rule-composer/commit/2ce3403d9cade255f904a3f8b9135076fa0937f1))
