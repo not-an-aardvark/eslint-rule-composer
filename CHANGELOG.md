@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.0 (2018-04-16)
+
+* Update: Add filename property to metadata ([#3](https://github.com/not-an-aardvark/eslint-rule-composer/issues/3)) ([c6982df](https://github.com/not-an-aardvark/eslint-rule-composer/commit/c6982df862ffd9f2f7595d05d407eb7b5f9e83f9))
+
 ## v0.2.0 (2018-04-14)
 
 * Update: Add a reference to context settings and options ([#1](https://github.com/not-an-aardvark/eslint-rule-composer/issues/1)) ([e7312ba](https://github.com/not-an-aardvark/eslint-rule-composer/commit/e7312bae50399f7576220649a52b8bbb4d4083c2))
