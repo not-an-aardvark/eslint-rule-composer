@@ -107,6 +107,7 @@ In both cases, `predicate` is called with two arguments: `problem` and `metadata
 * `sourceCode`: a [`SourceCode`](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode) instance corresponding to the linted text.
 * `settings`: linter instance's [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings)
 * `options`: rule's [configuration options](https://eslint.org/docs/developer-guide/working-with-rules#contextoptions)
+* `filename`: corresponding filename for the linted text.
 
 ### `ruleComposer.joinReports(rules)`
 

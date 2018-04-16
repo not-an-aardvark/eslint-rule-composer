@@ -113,6 +113,33 @@ ruleTester.run(
 );
 
 ruleTester.run(
+  'filterReports with filename',
+  ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor, metadata) => {
+    assert.strictEqual(metadata.filename, 'index.js');
+    return descriptor.node && descriptor.node.name !== 'foo';
+  }),
+  {
+    valid: [
+      {
+        code: 'foo',
+        filename: 'index.js',
+      },
+      {
+        code: 'var bar; bar;',
+        filename: 'index.js',
+      },
+    ],
+    invalid: [
+      {
+        code: 'bar;',
+        errors: [{ line: 1, column: 1 }],
+        filename: 'index.js',
+      },
+    ],
+  }
+);
+
+ruleTester.run(
   'joinReports',
   ruleComposer.joinReports([
     context => ({ Program: node => context.report(node, 'foo') }),
@@ -192,6 +219,26 @@ ruleTester.run(
           { type: 'Program', message: 'FOO' },
         ],
         options: [{ method: 'toUpperCase' }],
+      },
+    ],
+  }
+);
+
+ruleTester.run(
+  'mapReports with filename',
+  ruleComposer.mapReports(
+    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
+    (descriptor, metadata) => Object.assign({}, descriptor, { message: metadata.filename })
+  ),
+  {
+    valid: [],
+    invalid: [
+      {
+        code: 'a',
+        filename: 'test.js',
+        errors: [
+          { type: 'Program', message: 'test.js' },
+        ],
       },
     ],
   }
