@@ -103,11 +103,10 @@ In both cases, `predicate` is called with two arguments: `problem` and `metadata
 
     When returning a descriptor with `mapReports`, the `messageId` property on the returned descriptor will be used to generate the new message. To modify a report message directly for a rule that uses message IDs, ensure that the `predicate` function returns an object without a `messageId` property.
 * `metadata` is an object containing information about the source text that was linted. This has the following properties:
-
-* `sourceCode`: a [`SourceCode`](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode) instance corresponding to the linted text.
-* `settings`: linter instance's [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings)
-* `options`: rule's [configuration options](https://eslint.org/docs/developer-guide/working-with-rules#contextoptions)
-* `filename`: corresponding filename for the linted text.
+    * `sourceCode`: a [`SourceCode`](https://eslint.org/docs/developer-guide/working-with-rules#contextgetsourcecode) instance corresponding to the linted text.
+    * `settings`: linter instance's [shared settings](https://eslint.org/docs/user-guide/configuring#adding-shared-settings)
+    * `options`: rule's [configuration options](https://eslint.org/docs/developer-guide/working-with-rules#contextoptions)
+    * `filename`: corresponding filename for the linted text.
 
 ### `ruleComposer.joinReports(rules)`
 
