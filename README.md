@@ -10,6 +10,12 @@ npm install eslint-rule-composer --save
 
 Requires Node 4 or later.
 
+If you're using TypeScript, it's recommended to install `@types/eslint`:
+
+```
+npm install -D @types/eslint
+```
+
 ## Examples
 
 The following example creates a modified version of the [`no-unused-expressions`](https://eslint.org/docs/rules/no-unused-expressions) rule which does not report lines starting with `expect`.
