@@ -25,3 +25,9 @@ ruleComposer.mapReports(ruleModule, (problem, metadata) => {
 ruleComposer.filterReports(ruleModule, (problem, metadata) => false);
 
 ruleComposer.joinReports([ruleModule, ruleModule]);
+
+ruleComposer.groupReports({
+	foo: ruleModule,
+	bar: [ruleModule, ['barDefaultOption']],
+	baz: [ruleModule, [{ option: 'bazDefaultOption' }]],
+});

@@ -162,6 +162,34 @@ ruleTester.run(
 );
 
 ruleTester.run(
+  'groupReports',
+  ruleComposer.groupReports({
+    foo: context => ({ Program: node => context.report(node, 'foo') }),
+    bar: context => ({ Program: node => context.report(node, context.options[0]) }),
+    baz: [context => ({ 'Program:exit': node => context.report(node, context.options[0]) }), 'bazDefault'],
+    qux: [{ create: context => ({ 'Program:exit': node => context.report(node, context.options[0]) }) }, 'quxDefault'],
+  }),
+  {
+    valid: [],
+    invalid: [
+      {
+        options: [{
+          bar: 'bar',
+          qux: 'qux',
+        }],
+        code: 'a',
+        errors: [
+          { type: 'Program', message: 'foo' },
+          { type: 'Program', message: 'bar' },
+          { type: 'Program', message: 'bazDefault' },
+          { type: 'Program', message: 'qux' },
+        ],
+      },
+    ],
+  }
+);
+
+ruleTester.run(
   'mapReports',
   ruleComposer.mapReports(
     context => ({ Program: node => context.report({ node, message: 'foo' }) }),

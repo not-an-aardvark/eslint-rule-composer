@@ -118,6 +118,12 @@ In both cases, `predicate` is called with two arguments: `problem` and `metadata
 
 Given an array of ESLint rule objects, `joinReports` returns a new rule that will report all of the problems from any of the rules in the array. The options provided to the new rule will also be provided to all of the rules in the array.
 
+### `ruleComposer.groupReports(rulesMap)`
+
+Given an object, keyed by rule ids, of ESLint rule objects; or arrays of which the first element is an ESLint rule object, and the second is that rule's option configuration; `groupReports` returns a new rule that will report all of the problems from any of the rules in the group. Any options provided to the new rule must be as an object, keyed by the respective rule ids, the values of which, if provided, will be used to override the options provided in the creation of the rule.
+
+This can be used to group rules together into a new group rule, but still allow for configuration of the sub-rules, either at the group rule's creation time, or at its configuration time.
+
 ### Getting a reference to an ESLint rule
 
 To get a reference to an ESLint core rule, you can use ESLint's [public API](https://eslint.org/docs/developer-guide/nodejs-api) like this:

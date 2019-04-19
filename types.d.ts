@@ -34,3 +34,9 @@ export function filterReports(
 export function joinReports(
   rules: eslint.Rule.RuleModule[]
 ): eslint.Rule.RuleModule;
+
+export function groupReports(
+  rulesMap: {
+    [id: string]: eslint.Rule.RuleModule | [eslint.Rule.RuleModule, any[]],
+  }
+): eslint.Rule.RuleModule;
