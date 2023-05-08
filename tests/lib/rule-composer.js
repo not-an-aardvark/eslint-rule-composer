@@ -1,5 +1,3 @@
-'use strict';
-
 const eslint = require('eslint');
 const assert = require('chai').assert;
 const ruleComposer = require('../..');
@@ -10,7 +8,7 @@ const coreRules = new eslint.Linter().getRules();
 
 ruleTester.run(
   'filterReports',
-  ruleComposer.filterReports(coreRules.get('no-undef'), descriptor => descriptor.node && descriptor.node.name !== 'foo'),
+  ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor) => descriptor.node && descriptor.node.name !== 'foo'),
   {
     valid: [
       'foo;',
@@ -30,7 +28,7 @@ ruleTester.run(
         errors: [{ line: 1, column: 1 }],
       },
     ],
-  }
+  },
 );
 
 // test with settings
@@ -68,7 +66,7 @@ ruleTester.run(
         settings: { tokenWhitelist: ['foo'] },
       },
     ],
-  }
+  },
 );
 
 const ruleWithOptions = ruleComposer.filterReports(coreRules.get('no-undef'), (descriptor, m) => (
@@ -109,7 +107,7 @@ ruleTester.run(
         options: [{ tokenWhitelist: ['foo'] }],
       },
     ],
-  }
+  },
 );
 
 ruleTester.run(
@@ -136,15 +134,15 @@ ruleTester.run(
         filename: 'index.js',
       },
     ],
-  }
+  },
 );
 
 ruleTester.run(
   'joinReports',
   ruleComposer.joinReports([
-    context => ({ Program: node => context.report(node, 'foo') }),
-    context => ({ 'Program:exit': node => context.report(node, 'bar') }),
-    { create: context => ({ 'Program:exit': node => context.report(node, 'baz') }) },
+    (context) => ({ Program: (node) => context.report(node, 'foo') }),
+    (context) => ({ 'Program:exit': (node) => context.report(node, 'bar') }),
+    { create: (context) => ({ 'Program:exit': (node) => context.report(node, 'baz') }) },
   ]),
   {
     valid: [],
@@ -158,14 +156,14 @@ ruleTester.run(
         ],
       },
     ],
-  }
+  },
 );
 
 ruleTester.run(
   'mapReports',
   ruleComposer.mapReports(
-    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
-    descriptor => Object.assign({}, descriptor, { message: descriptor.message.toUpperCase() })
+    (context) => ({ Program: (node) => context.report({ node, message: 'foo' }) }),
+    (descriptor) => ({ ...descriptor, message: descriptor.message.toUpperCase() }),
   ),
   {
     valid: [],
@@ -177,7 +175,7 @@ ruleTester.run(
         ],
       },
     ],
-  }
+  },
 );
 
 // test with settings
@@ -185,8 +183,8 @@ ruleTester.run(
 ruleTester.run(
   'mapReports - with settings',
   ruleComposer.mapReports(
-    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
-    (descriptor, m) => Object.assign({}, descriptor, { message: descriptor.message[m.settings.method]() })
+    (context) => ({ Program: (node) => context.report({ node, message: 'foo' }) }),
+    (descriptor, m) => ({ ...descriptor, message: descriptor.message[m.settings.method]() }),
   ),
   {
     valid: [],
@@ -199,7 +197,7 @@ ruleTester.run(
         settings: { method: 'toUpperCase' },
       },
     ],
-  }
+  },
 );
 
 // test with settings
@@ -207,8 +205,8 @@ ruleTester.run(
 ruleTester.run(
   'mapReports - with options',
   ruleComposer.mapReports(
-    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
-    (descriptor, m) => Object.assign({}, descriptor, { message: descriptor.message[m.options[0].method]() })
+    (context) => ({ Program: (node) => context.report({ node, message: 'foo' }) }),
+    (descriptor, m) => ({ ...descriptor, message: descriptor.message[m.options[0].method]() }),
   ),
   {
     valid: [],
@@ -221,14 +219,14 @@ ruleTester.run(
         options: [{ method: 'toUpperCase' }],
       },
     ],
-  }
+  },
 );
 
 ruleTester.run(
   'mapReports with filename',
   ruleComposer.mapReports(
-    context => ({ Program: node => context.report({ node, message: 'foo' }) }),
-    (descriptor, metadata) => Object.assign({}, descriptor, { message: metadata.filename })
+    (context) => ({ Program: (node) => context.report({ node, message: 'foo' }) }),
+    (descriptor, metadata) => ({ ...descriptor, message: metadata.filename }),
   ),
   {
     valid: [],
@@ -241,14 +239,14 @@ ruleTester.run(
         ],
       },
     ],
-  }
+  },
 );
 
 ruleTester.run(
   'checking the first token of the report',
   ruleComposer.filterReports(
     coreRules.get('no-unused-expressions'),
-    (problem, metadata) => metadata.sourceCode.getFirstToken(problem.node).value !== 'expect'
+    (problem, metadata) => metadata.sourceCode.getFirstToken(problem.node).value !== 'expect',
   ),
   {
     valid: [
@@ -261,7 +259,7 @@ ruleTester.run(
         errors: 1,
       },
     ],
-  }
+  },
 );
 
 ruleTester.run(
@@ -304,7 +302,7 @@ ruleTester.run(
       }
 
       return problem.message === 'Foo error.' || problem.messageId === 'baz';
-    }
+    },
   ),
   {
     valid: [],
@@ -317,5 +315,5 @@ ruleTester.run(
         ],
       },
     ],
-  }
+  },
 );
