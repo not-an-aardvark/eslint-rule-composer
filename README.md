@@ -42,7 +42,7 @@ module.exports = ruleComposer.joinReports([
   semiRule,
   context => ({
     ClassProperty(node) {
-      if (context.getSourceCode().getLastToken(node).value !== ';') {
+      if (context.sourceCode.getLastToken(node).value !== ';') {
         context.report({ node, message: 'Missing semicolon.' })
       }
     }

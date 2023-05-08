@@ -38,6 +38,9 @@
     "mocha": "^10.2.0",
     "typescript": "^5.0.4"
   },
+  "peerDependencies": {
+    "eslint": "^8.40.0"
+  },
   "engines": {
     "node": ">=8.3.0"
   }
